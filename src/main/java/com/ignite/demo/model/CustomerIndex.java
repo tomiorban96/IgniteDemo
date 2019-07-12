@@ -1,30 +1,16 @@
 package com.ignite.demo.model;
 
+import java.util.Set;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor 
 public class CustomerIndex {
 
     private String lastName;
-    private UUID id;
+    private Set<UUID> ids;
 
-    public CustomerIndex(String lastName, UUID id) {
-        this.lastName = lastName;
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 }
