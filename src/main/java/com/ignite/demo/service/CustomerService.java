@@ -1,5 +1,6 @@
 package com.ignite.demo.service;
 
+import com.ignite.demo.exception.CustomerAlreadyExistsException;
 import com.ignite.demo.model.Customer;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
@@ -9,8 +10,7 @@ import org.apache.ignite.transactions.Transaction;
 import org.springframework.stereotype.Service;
 
 import javax.cache.CacheException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CustomerService {
@@ -19,12 +19,12 @@ public class CustomerService {
     private IgniteTransactions transactions = ignite.transactions();
 
     private IgniteCache<UUID, Customer> customerCache = ignite.getOrCreateCache("customerCache");
-    private IgniteCache<String, UUID> customerIndexCache = ignite.getOrCreateCache("customerIndexCache");
+    private IgniteCache<String, Set<UUID>> customerIndexCache = ignite.getOrCreateCache("customerIndexCache");
 
     public List<Customer> getCustomerByLastName(String lastName) {
 
-        List<Customer> customers;
-        for(UUID id : )
+        Map<UUID, Customer> customersMap = customerCache.getAll(customerIndexCache.get(lastName));
+        return new ArrayList(customersMap.values());
 
     }
 
@@ -35,12 +35,30 @@ public class CustomerService {
     public Customer addCustomer(Customer customer) {
 
         try (Transaction tx = transactions.txStart()) {
+
+            if (customerCache.get(customer.getId()) != null) {
+                throw new CustomerAlreadyExistsException();
+            }
+
             customerCache.put(customer.getId(), customer);
-            customerIndexCache.put(customer.getLastName(), customer.getId());
+
+            Set<UUID> uuids = customerIndexCache.get(customer.getLastName());
+
+            if (uuids == null) {
+                uuids = new HashSet<>();
+            }
+
+            uuids.add(customer.getId());
+
+            customerIndexCache.put(customer.getLastName(), uuids);
+
             tx.commit();
+
         } catch (CacheException ex) {
+
             //TODO: Handle exception
             throw ex;
+
         }
 
         return customer;
@@ -50,12 +68,17 @@ public class CustomerService {
     public Customer updateCustomer(UUID id, Customer customer) {
 
         try (Transaction tx = transactions.txStart()) {
+
             customerCache.replace(customer.getId(), customer);
             customerIndexCache.replace(customer.getLastName(), customer.getId());
+
             tx.commit();
+
         } catch (CacheException ex) {
+
             //TODO: Handle exception
             throw ex;
+
         }
 
         return customer;
@@ -63,14 +86,27 @@ public class CustomerService {
     }
 
     public void deleteById(UUID id) {
+
         try (Transaction tx = transactions.txStart()) {
+
             String lastName = customerCache.get(id).getLastName();
+
+            Set<UUID> uuids = customerIndexCache.get(lastName);
+
+            uuids.remove(id);
+
+            customerIndexCache.replace(lastName, uuids);
+
             customerCache.clear(id);
 
             tx.commit();
+
         } catch (CacheException ex) {
+
             //TODO: Handle exception
             throw ex;
+
         }
     }
+
 }
