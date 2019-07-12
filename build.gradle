@@ -17,5 +17,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.apache.ignite:ignite-spring-data:2.6.0'
+	implementation 'org.projectlombok:lombok:1.18.8'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

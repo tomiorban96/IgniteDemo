@@ -1,45 +1,34 @@
 package com.ignite.demo.model;
 
+import java.util.Date;
 import java.util.UUID;
 
+import lombok.Data;
+
+@Data
 public class Customer {
 
     private UUID id;
     private String firstName;
     private String lastName;
-    private String fullName;
+    private Date birthDate;
+    private IdTypeEnum idType;
+    private String idNum;
 
     public Customer(){
         this.id = UUID.randomUUID();
     }
 
-    public Customer(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.fullName = firstName + " " + lastName;
+    public Customer(String firstName, String lastName, Date birthDate, String idNum) {
         this.id = UUID.randomUUID();
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
         this.firstName = firstName;
-        this.fullName = firstName + " " + lastName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
-        this.fullName = firstName + " " + lastName;
+        this.birthDate = birthDate;
+        this.idNum = idNum;
     }
 
     public String getFullName() {
-        return fullName;
+        return firstName + " " + lastName;
     }
 
 }
