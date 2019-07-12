@@ -1,0 +1,151 @@
+---
+swagger: "2.0"
+info:
+  description: "Customer Demo API"
+  version: "1.0.0"
+  title: "Customer Demo API"
+  contact:
+    name: "CSOE DEV Team"
+    email: "what@ever"
+  license:
+    name: "Proprietary license"
+host: "localhost:8032"
+basePath: "/CustomerDemo/v1"
+tags:
+- name: "catalog"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+security:
+- accessToken: []
+- apiKey: []
+paths:
+  /customer/firstName/{firstName}:
+    get:
+      tags:
+      - "Customer"
+      summary: "This operation find a customer"
+      operationId: "getCustomerByFirstName"
+      parameters:
+      - name: "firstName"
+        in: "path"
+        description: "Firstname of the customer"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+      deprecated: false      
+  /customer:
+    post:
+      tags:
+      - "Customer"
+      summary: "This operation creates a new customer"
+      operationId: "postCustomer"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "data"
+        required: true
+        schema:
+          $ref: "#/definitions/Customer"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Customer"
+      deprecated: false
+  /customer/{id}:
+    delete:
+      tags:
+      - "Customer"
+      summary: "This operation deletes a customer by id"
+      operationId: "deleteCustomer"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
+      deprecated: false
+    get:
+      tags:
+      - "Customer"
+      summary: "This operation returns a customer"
+      operationId: "getCustomer"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
+      deprecated: false      
+    patch:
+      tags:
+      - "Customer"
+      summary: "This operation updates a customer"
+      operationId: "updateCustomer"
+      parameters:
+      - in: "path"
+        name: "id"
+        type: "string"
+        required: true
+      - name: "customer"
+        in: "body"
+        schema:
+          $ref: "#/definitions/Customer"
+      responses:
+        200:
+          description: "OK"
+      deprecated: false      
+    
+securityDefinitions:
+  accessToken:
+    description: "Access token in JWT or opaque format sent in HTTP Authorization\
+      \ header, Bearer schema"
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+  apiKey:
+    description: "API key for technical accounts (opaque format) sent in HTTP Authorization\
+      \ header, no schema"
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Customer:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier of the customer"
+      firstName:
+        type: "string"
+        description: "Firstname of the customer"
+      lastName:
+        type: "string"
+        description: "Lastname of the customer"
+      birthDate:
+        type: "string"
+        description: "Birthdate of the customer"
+      idType:
+        type: "string"
+        description: "Type of the identification document"
+        enum:
+        - "identity card"
+        - "driving license"
+        - "passport"
+      idNum:
+        type: "string"
+        description: "Number of the identification document"

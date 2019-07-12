@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Customer {
 
-    private UUID id;
+	private UUID id;
     private String firstName;
     private String lastName;
     private Date birthDate;
