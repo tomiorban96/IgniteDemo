@@ -18,14 +18,14 @@ public class Customer {
     public Customer(){
         this.id = UUID.randomUUID();
     }
-    
+
     public Customer(String firstName, String lastName, Date birthDate, String idNum) {
-    	this.id = UUID.randomUUID();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.birthDate = birthDate;
-		this.idNum = idNum;
-	}
+        this.id = UUID.randomUUID();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.idNum = idNum;
+    }
 
     public String getFullName() {
         return firstName + " " + lastName;

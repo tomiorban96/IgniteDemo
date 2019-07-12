@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor 
+@AllArgsConstructor
 public class CustomerIndex {
 
     private String lastName;
