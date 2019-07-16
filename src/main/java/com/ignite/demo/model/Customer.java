@@ -1,18 +1,22 @@
 package com.ignite.demo.model;
 
+import lombok.Data;
 import java.util.Date;
 import java.util.UUID;
-
-import lombok.Data;
 
 @Data
 public class Customer {
 
 	private UUID id;
+
     private String firstName;
+
     private String lastName;
+
     private Date birthDate;
+
     private IdTypeEnum idType;
+
     private String idNum;
 
     public Customer(){

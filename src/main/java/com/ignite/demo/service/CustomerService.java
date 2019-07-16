@@ -76,9 +76,7 @@ public class CustomerService {
 
         try (Transaction tx = transactions.txStart()) {
 
-            if (id != customer.getId()) {
-                throw new IllegalArgumentException("The id and the Customer is not consistent");
-            }
+            customer.setId(id);
 
             Customer currentCustomer = customerCache.get(id);
 
