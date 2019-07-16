@@ -17,7 +17,7 @@ import java.util.*;
 @Service
 public class CustomerService {
 
-    private Ignite ignite = Ignition.ignite();
+    private Ignite ignite = Ignition.start();
     private IgniteTransactions transactions = ignite.transactions();
 
     private IgniteCache<UUID, Customer> customerCache = ignite.getOrCreateCache("customerCache");
