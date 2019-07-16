@@ -1,6 +1,8 @@
 package com.ignite.demo.service;
 
 import com.ignite.demo.exception.CustomerAlreadyExistsException;
+import com.ignite.demo.exception.CustomerNotFoundException;
+import com.ignite.demo.exception.InconsistentCacheException;
 import com.ignite.demo.model.Customer;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
@@ -24,7 +26,12 @@ public class CustomerService {
     public List<Customer> getCustomerByLastName(String lastName) {
 
         Map<UUID, Customer> customersMap = customerCache.getAll(customerIndexCache.get(lastName));
-        return new ArrayList(customersMap.values());
+
+        if (customersMap == null || customersMap.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return new ArrayList<Customer>(customersMap.values());
+        }
 
     }
 
@@ -69,8 +76,17 @@ public class CustomerService {
 
         try (Transaction tx = transactions.txStart()) {
 
-            customerCache.replace(customer.getId(), customer);
-            customerIndexCache.replace(customer.getLastName(), customer.getId());
+            if (id != customer.getId()) {
+                throw new IllegalArgumentException("The id and the Customer is not consistent");
+            }
+
+            Customer currentCustomer = customerCache.get(id);
+
+            if (currentCustomer == null) {
+                throw new CustomerNotFoundException();
+            }
+
+            customerCache.replace(id, customer);
 
             tx.commit();
 
