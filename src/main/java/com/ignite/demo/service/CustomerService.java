@@ -109,7 +109,14 @@ public class CustomerService {
 
         try (Transaction tx = transactions.txStart()) {
 
-            String lastName = customerCache.get(id).getLastName();
+            Customer toDelete = customerCache.get(id);
+
+            if (toDelete == null) {
+                return;
+            }
+
+            String lastName = toDelete.getLastName();
+
 
             Set<UUID> uuids = customerIndexCache.get(lastName);
 
