@@ -25,7 +25,13 @@ public class CustomerService {
 
     public List<Customer> getCustomerByLastName(String lastName) {
 
-        Map<UUID, Customer> customersMap = customerCache.getAll(customerIndexCache.get(lastName));
+        Set<UUID> uuids = customerIndexCache.get(lastName);
+
+        if (uuids == null) {
+            return new ArrayList<>();
+        }
+
+        Map<UUID, Customer> customersMap = customerCache.getAll(uuids);
 
         if (customersMap == null || customersMap.isEmpty()) {
             return new ArrayList<>();

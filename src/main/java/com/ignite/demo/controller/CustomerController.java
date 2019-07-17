@@ -26,7 +26,7 @@ public class CustomerController {
         return customerService.getCustomerById(id);
     }
 
-    // GET /customer/lastName/doe
+    // GET /customer/lastName/Doe
     @GetMapping("/lastName/{lastName}")
     public List<Customer> getCustomerByLastName(@PathVariable("lastName") String lastName) {
         return customerService.getCustomerByLastName(lastName);

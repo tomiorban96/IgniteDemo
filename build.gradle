@@ -21,4 +21,5 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+//Fixes h2 driver error with ignite
 ext['h2.version'] = '1.4.196'
